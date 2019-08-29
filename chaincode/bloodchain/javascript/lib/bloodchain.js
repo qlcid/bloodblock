@@ -102,6 +102,8 @@ class BloodChain extends Contract {
 
     async createCar(ctx, carNumber, make, model, color, owner) {
         console.info('============= START : Create Car ===========');
+        color = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋ";
+        
         const car = {
             color,
             docType: 'car',

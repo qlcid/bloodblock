@@ -29,7 +29,7 @@ async function invoke() {
 
 		// setup the fabric network
 		// -- channel instance to represent the ledger named "mychannel"
-		const channel = fabric_client.newChannel('mychannel');
+		const channel = fabric_client.newChannel('bloodchannel');
 		console.log('Created client side object to represent the channel');
 		// -- peer instance to represent a peer on the channel
 		const peer = fabric_client.newPeer('grpcs://localhost:7051', {
@@ -81,9 +81,9 @@ async function invoke() {
 		//   'changeCarOwner' - requires 2 args , ex: args: ['CAR10', 'Dave']
 		const proposal_request = {
 			targets: [peer],
-			chaincodeId: 'fabcar',
+			chaincodeId: 'bloodchain',
 			fcn: 'createCar',
-			args: ['CAR11232', 'Hosdfsdnda', 'Acsdfcord', 'zzzzzzzzzzz', 'Tom'],
+			args: ['CAR12', 'Honda', 'Accord', 'zzzzzzzzzzz', 'Tom'],
 			chainId: 'mychannel',
 			txId: tx_id
 		};
