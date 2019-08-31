@@ -10,79 +10,38 @@ class BloodChain extends Contract {
 
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
-        const cars = [
+
+        // 초기화 데이터 넣어놓은 거~
+        const bloodCards = [
             {
-                color: 'blue',
-                make: 'Toyota',
-                model: 'Prius',
-                owner: 'Tomoko',
+                owner: 'wocjf8888',
+                is_donated: false,
+                donater: null,
+                dona_date: null,
+                is_used: false,
+                used_place: null,
             },
             {
-                color: 'red',
-                make: 'Ford',
-                model: 'Mustang',
-                owner: 'Brad',
-            },
-            {
-                color: 'green',
-                make: 'Hyundai',
-                model: 'Tucson',
-                owner: 'Jin Soo',
-            },
-            {
-                color: 'yellow',
-                make: 'Volkswagen',
-                model: 'Passat',
-                owner: 'Max',
-            },
-            {
-                color: 'black',
-                make: 'Tesla',
-                model: 'S',
-                owner: 'Adriana',
-            },
-            {
-                color: 'purple',
-                make: 'Peugeot',
-                model: '205',
-                owner: 'Michel',
-            },
-            {
-                color: 'white',
-                make: 'Chery',
-                model: 'S22L',
-                owner: 'Aarav',
-            },
-            {
-                color: 'violet',
-                make: 'Fiat',
-                model: 'Punto',
-                owner: 'Pari',
-            },
-            {
-                color: 'indigo',
-                make: 'Tata',
-                model: 'Nano',
-                owner: 'Valeria',
-            },
-            {
-                color: 'brown',
-                make: 'Holden',
-                model: 'Barina',
-                owner: 'Shotaro',
+                owner: 'jaecheol1234',
+                is_donated: false,
+                donater: null,
+                dona_date: null,
+                is_used: false,
+                used_place: null,
             },
         ];
 
-        for (let i = 0; i < cars.length; i++) {
-            cars[i].docType = 'car';
-            await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
-            console.info('Added <--> ', cars[i]);
+        for (let i = 0; i < bloodCards.length; i++) {
+            bloodCards[i].docType = 'bloodCard';
+            await ctx.stub.putState('BLOODCARD' + i, Buffer.from(JSON.stringify(bloodCards[i])));
+            console.info('Added <--> ', bloodCards[i]);
         }
+
+
         console.info('============= END : Initialize Ledger ===========');
     }
 
-    // 헌혈증 등록해주는 함수
-    async registerBloodCard(ctx, serialNumber) {
+    async queryBloodCard(ctx, serialNumber) {
         const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
         if (!carAsBytes || carAsBytes.length === 0) {
             throw new Error(`${carNumber} does not exist`);
@@ -90,42 +49,13 @@ class BloodChain extends Contract {
         console.log(carAsBytes.toString());
         return carAsBytes.toString();
     }
-
-    async queryCar(ctx, carNumber) {
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
-        }
-        console.log(carAsBytes.toString());
-        return carAsBytes.toString();
-    }
-
-    async createCar(ctx, carNumber, make, model, color, owner) {
-        console.info('============= START : Create Car ===========');
-        color = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋ";
-        
-        const car = {
-            color,
-            docType: 'car',
-            make,
-            model,
-            owner,
-        };
-
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : Create Car ===========');
-    }
-
-    async queryAllCars(ctx) {
-        const startKey = 'CAR0';
-        const endKey = 'CAR999';
-
-        const iterator = await ctx.stub.getStateByRange(startKey, endKey);
-
+    async queryAllBloodCards(ctx) {
+        const iterator = await ctx.stub.getQueryResult("{\"fields\": [\"owner\"], \"selector\": {\"docType\": \"bloodCard\"}}");
+        console.log(iterator)
         const allResults = [];
         while (true) {
             const res = await iterator.next();
-
+            console.log(res);
             if (res.value && res.value.value.toString()) {
                 console.log(res.value.value.toString('utf8'));
 
@@ -147,6 +77,24 @@ class BloodChain extends Contract {
             }
         }
     }
+    async register(ctx, serialNumber, owner) {
+        console.info('============= START : Create bloodCard ===========');
+
+        const bloodCard = {
+            owner,
+            is_donated: false,
+            donater: null,
+            dona_date: null,
+            is_used: false,
+            used_place: null,
+            docType: 'bloodCard',
+        };
+
+        await ctx.stub.putState(serialNumber, Buffer.from(JSON.stringify(bloodCard)));
+        console.info('============= END : Create bloodCard ===========');
+    }
+
+
 
     async changeCarOwner(ctx, carNumber, newOwner) {
         console.info('============= START : changeCarOwner ===========');

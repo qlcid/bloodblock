@@ -17,9 +17,43 @@ var firstnetwork_path = path.resolve('..', '..', 'first-network');
 var org1tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org1.example.com', 'tlsca', 'tlsca.org1.example.com-cert.pem');
 var org1tlscacert = fs.readFileSync(org1tlscacert_path, 'utf8');
 
-invoke();
 
-async function invoke() {
+// 재철이가 작성함~  명령행인자 받아서 invoke.js 호출함. 다음과 같이사용, 웹연동 없이 개발하는거라 직접 인자로 넘겨주는거에요
+// node invoke.js [호출할 함수 이름] [함수의 매개변수...]  
+// ex)
+// node invoke.js register 1(일련번호) wocjf8888(owner 아이디)              
+// node invoke.js donate a(donater 아이디) b(요청자 아이디) 1(일련번호)
+// node invoke.js useCard 
+// 등등 함수 추가?
+const process = require('process');
+var args = process.argv;
+var func = args[2]; // 무슨 함수 호출할건지 가져옴.  등록(register) 인지 기부(donate) 인지 등등
+switch (func) {
+	case 'register':
+		if(args.length != 5){
+			console.log('인자 개수 error! 다시입력 ㄱㄱ');
+			break;
+		}
+		invoke('register', args[3], args[4]);
+		break;
+	case 'donate':
+		if(args.length != 6){
+			console.log('인자 개수 error! 다시입력 ㄱㄱ');
+			break;
+		}
+		invoke('donate', args[3], args[4], args[5]);
+	case 'useCard':
+		if(args.length != 6){
+			console.log('인자 개수 error! 다시입력 ㄱㄱ');
+			break;
+		}
+		invoke('donate', args[3], args[4], args[5]);
+	default:
+		break;
+}
+
+
+async function invoke(func, params) {
 	console.log('\n\n --- invoke.js - start');
 	try {
 		console.log('Setting up client side network objects');
@@ -28,7 +62,7 @@ async function invoke() {
 		const fabric_client = new Fabric_Client();
 
 		// setup the fabric network
-		// -- channel instance to represent the ledger named "mychannel"
+		// -- channel instance to represent the ledger named "bloodchannel"
 		const channel = fabric_client.newChannel('bloodchannel');
 		console.log('Created client side object to represent the channel');
 		// -- peer instance to represent a peer on the channel
@@ -79,15 +113,34 @@ async function invoke() {
 		// The fabcar chaincode is able to perform a few functions
 		//   'createCar' - requires 5 args, ex: args: ['CAR12', 'Honda', 'Accord', 'Black', 'Tom']
 		//   'changeCarOwner' - requires 2 args , ex: args: ['CAR10', 'Dave']
-		const proposal_request = {
-			targets: [peer],
-			chaincodeId: 'bloodchain',
-			fcn: 'createCar',
-			args: ['CAR12', 'Honda', 'Accord', 'zzzzzzzzzzz', 'Tom'],
-			chainId: 'mychannel',
-			txId: tx_id
-		};
+		
 
+		// 위에서 가져온 함수, param 정보대로 proposal_request 객체 생성 
+		let proposal_request;
+		switch (func) {
+			case 'register':
+				proposal_request = {
+					targets: [peer],
+					chaincodeId: 'bloodchain',
+					fcn: 'register',
+					args: [params[0], params[1]],
+					chainId: 'bloodchannel',
+					txId: tx_id
+				};
+				break;
+			case 'donate':
+				proposal_request = {
+					targets: [peer],
+					chaincodeId: 'bloodchain',
+					fcn: 'donate',
+					args: [params[0], params[1], params[2]],
+					chainId: 'bloodchannel',
+					txId: tx_id
+				};
+				break;
+			default:
+				break;
+		}
 		// notice the proposal_request has the peer defined in the 'targets' attribute
 
 		// Send the transaction proposal to the endorsing peers.
