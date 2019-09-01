@@ -124,7 +124,38 @@ class BloodChain extends Contract {
 
     // 기부받은 헌혈증 확인 
     async queryBloodCardsDonated(ctx, owner) {
-       
+        const iterator = await ctx.stub.getQueryResult(`{
+            "selector": {
+                "docType": "bloodCard",
+                "is_donated": true,
+		"owner": "${owner}"
+            }
+        }`);
+        const allResults = [];
+
+        while (true) {
+            const res = await iterator.next();
+            if (res.value && res.value.value.toString()) {
+                console.log(res.value.value.toString('utf8'));
+
+                const Key = res.value.key;
+                let Record;
+                try {
+                    Record = JSON.parse(res.value.value.toString('utf8'));
+                } catch (err) {
+                    console.log(err);
+                    Record = res.value.value.toString('utf8');
+                }
+                allResults.push({ Key, Record });
+            }
+
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
+            }
+        }       
     }
 
     // 헌혈증 등록(구현 완료) return : x
