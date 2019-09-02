@@ -71,7 +71,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 				args: ['']
 			};
 			break;
-		case 'owner':
+
+		case 'onlyreg':
 			if (args.length != 4) {
 				console.log('인자 개수 error! 다시입력 ㄱㄱ');
 				break;
@@ -79,9 +80,50 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 			request = {
 				//targets : --- letting this default to the peers assigned to the channel
 				chaincodeId: 'bloodchain',
-				fcn: 'queryBloodCardsByOwner',
-				args: args.slice(3)
+				fcn: 'queryBloodCardsOnlyReg',
+				args: args[3]
 			};
+			break;
+
+		case 'onlydona':
+			if (args.length != 4) {
+				console.log('인자 개수 error! 다시입력 ㄱㄱ');
+				break;
+			}
+			request = {
+				//targets : --- letting this default to the peers assigned to the channel
+				chaincodeId: 'bloodchain',
+				fcn: 'queryBloodCardsOnlyDona',
+				args: args[3]
+			};
+			break;
+
+		case 'used':
+			if (args.length != 4) {
+				console.log('인자 개수 error! 다시입력 ㄱㄱ');
+				break;
+			}
+			request = {
+				//targets : --- letting this default to the peers assigned to the channel
+				chaincodeId: 'bloodchain',
+				fcn: 'queryBloodCardsDonaUsed',
+				args: args[3]
+			};
+			break;
+
+		case 'donated':
+			if (args.length != 4) {
+				console.log('인자 개수 error! 다시입력 ㄱㄱ');
+				break;
+			}
+			request = {
+				//targets : --- letting this default to the peers assigned to the channel
+				chaincodeId: 'bloodchain',
+				fcn: 'queryBloodCardsDonated',
+				args: args[3]
+			};
+			break;
+
 		default:
 			break;
 	}
