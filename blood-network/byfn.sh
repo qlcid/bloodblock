@@ -112,7 +112,7 @@ function removeUnwantedImages() {
   fi
 }
 
-# Versions of fabric known not to work with this release of first-network
+# Versions of fabric known not to work with this release of blood-network
 BLACKLISTED_VERSIONS="^1\.0\. ^1\.1\.0-preview ^1\.1\.0-alpha"
 
 # Do some basic sanity checking to make sure that the appropriate versions of fabric
@@ -281,7 +281,7 @@ function networkDown() {
   if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
     #Delete any ledger backups
-    docker run -v $PWD:/tmp/first-network --rm hyperledger/fabric-tools:$IMAGETAG rm -Rf /tmp/first-network/ledgers-backup
+    docker run -v $PWD:/tmp/blood-network --rm hyperledger/fabric-tools:$IMAGETAG rm -Rf /tmp/blood-network/ledgers-backup
     #Cleanup the chaincode containers
     clearContainers
     #Cleanup images

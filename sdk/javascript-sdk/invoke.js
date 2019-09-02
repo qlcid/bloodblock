@@ -13,8 +13,8 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 
-var firstnetwork_path = path.resolve('..', '..', 'first-network');
-var org1tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org1.example.com', 'tlsca', 'tlsca.org1.example.com-cert.pem');
+var bloodnetwork_path = path.resolve('..', '..', 'blood-network');
+var org1tlscacert_path = path.resolve(bloodnetwork_path, 'crypto-config', 'peerOrganizations', 'org1.example.com', 'tlsca', 'tlsca.org1.example.com-cert.pem');
 var org1tlscacert = fs.readFileSync(org1tlscacert_path, 'utf8');
 
 // node invoke.js [호출할 함수 이름] [함수의 매개변수...]  

@@ -12,8 +12,8 @@ var Fabric_Client = require('fabric-client');
 var fs = require('fs');
 var path = require('path');
 
-var firstnetwork_path = path.resolve('..', '..', 'first-network');
-var org2tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org2.example.com', 'tlsca', 'tlsca.org2.example.com-cert.pem');
+var bloodnetwork_path = path.resolve('..', '..', 'blood-network');
+var org2tlscacert_path = path.resolve(bloodnetwork_path, 'crypto-config', 'peerOrganizations', 'org2.example.com', 'tlsca', 'tlsca.org2.example.com-cert.pem');
 var org2tlscacert = fs.readFileSync(org2tlscacert_path, 'utf8');
 
 //
