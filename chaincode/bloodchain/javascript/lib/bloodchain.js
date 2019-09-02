@@ -39,20 +39,11 @@ class BloodChain extends Contract {
             await ctx.stub.putState('BLOODCARD' + i, Buffer.from(JSON.stringify(bloodCards[i])));
             console.info('Added <--> ', bloodCards[i]);
         }
-
-
         console.info('============= END : Initialize Ledger ===========');
     }
 
- 
-
     // 모든 헌혈증의 모든 value 검색(확인용, 구현 완료) return : 헌혈증 key, value(record) 문자열화 한 배열
     async queryAllBloodCards(ctx) {
-        // var query = {
-        //     "selector": {
-        //         "docType": "bloodCard"
-        //     }
-        // }
         const iterator = await ctx.stub.getQueryResult(`{
             "selector": {
                 "docType": "bloodCard"
@@ -83,9 +74,13 @@ class BloodChain extends Contract {
         }
     }
 
-    // 특정 owner 아이디로 검색 (미구현)      return : 여러개 나올 수 있으므로 queryAllBloodCards와 비슷하게 해야함
-    async queryBloodCardsByOwner(ctx, owner) {
-        const iterator = await ctx.stub.getQueryResult("{\"selector\": {\"docType\": \"bloodCard\"}}");
+    // 등록 o 기부 x 
+    async queryBloodCardsOnlyReg(ctx, owner) {
+        const iterator = await ctx.stub.getQueryResult(`{
+            "selector": {
+                "docType": "bloodCard"
+            }
+        }`);
         const allResults = [];
         while (true) {
             const res = await iterator.next();
@@ -111,7 +106,21 @@ class BloodChain extends Contract {
         }
     }
 
-    // 헐혈증 등록(구현 완료) return : x
+    // 기부 o 사용 x 
+    async queryBloodCardsOnlyDona(ctx, donater) {
+       
+    }
+    // 기부 o 사용 o
+    async queryBloodCardsDonaUsed(ctx, donater) {
+       
+    }
+
+    // 기부받은 헌혈증 확인 
+    async queryBloodCardsDonated(ctx, owner) {
+       
+    }
+
+    // 헌혈증 등록(구현 완료) return : x
     async register(ctx, serialNumber, owner) {
         console.info('============= START : Create bloodCard ===========');
         const bloodCard = {
@@ -140,6 +149,9 @@ class BloodChain extends Contract {
                 "owner": "${donater}", 
                 "is_donated": false,
             },
+            "sort": [
+                {"reg_date": "asc"}
+            ],
             "limit": ${donate_count}
         }`);
         while (true) {
