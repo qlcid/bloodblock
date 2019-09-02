@@ -44,14 +44,14 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     // be sure to change the http to https when the CA is running TLS enabled
     fabric_ca_client = new Fabric_CA_Client('https://localhost:8054', tlsOptions , 'ca-org2', crypto_suite);
 
-    // first check to see if the admin is already enrolled
-    return fabric_client.getUserContext('admin', true);
+    // first check to see if the admin2 is already enrolled
+    return fabric_client.getUserContext('admin2', true);
 }).then((user_from_store) => {
     if (user_from_store && user_from_store.isEnrolled()) {
-        console.log('Successfully loaded admin from persistence');
+        console.log('Successfully loaded admin2 from persistence');
         admin_user = user_from_store;
     } else {
-        throw new Error('Failed to get admin.... run enrollAdmin.js');
+        throw new Error('Failed to get admin2.... run enrollAdmin2.js');
     }
 
     // at this point we should have the admin user
