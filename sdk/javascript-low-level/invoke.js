@@ -17,8 +17,6 @@ var firstnetwork_path = path.resolve('..', '..', 'first-network');
 var org1tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org1.example.com', 'tlsca', 'tlsca.org1.example.com-cert.pem');
 var org1tlscacert = fs.readFileSync(org1tlscacert_path, 'utf8');
 
-
-// 재철이가 작성함~  명령행인자 받아서 invoke.js 호출함. 다음과 같이사용, 일단 웹연동 없이 개발하는거라 직접 인자로 넘겨주는거임
 // node invoke.js [호출할 함수 이름] [함수의 매개변수...]  
 // ex)
 // node invoke.js register 1(일련번호) wocjf8888(등록자 아이디)              
@@ -54,7 +52,6 @@ switch (func) {
 	default:
 		break;
 }
-
 
 async function invoke(func, params) {
 	console.log('\n\n --- invoke.js - start');

@@ -52,7 +52,6 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		throw new Error('Failed to get user2.... run registerUser.js');
 	}
 
-	// 재철이가 작성함~  명령행인자 받아서 query.js 호출함. 다음과 같이사용, 일단 웹연동 없이 개발하는거라 직접 인자로 넘겨주는거임
 	// node query.js [호출 구분 이름] [함수의 매개변수...]  
 	// ex)
 	// node query.js all
@@ -127,12 +126,6 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		default:
 			break;
 	}
-
-
-
-	// queryCar chaincode function - requires 1 argument, ex: args: ['CAR4'],
-	// queryAllCars chaincode function - requires no arguments , ex: args: [''],
-
 
 	// send the query proposal to the peer
 	return channel.queryByChaincode(request);

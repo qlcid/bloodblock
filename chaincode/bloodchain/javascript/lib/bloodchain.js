@@ -110,6 +110,7 @@ class BloodChain extends Contract {
     async queryBloodCardsOnlyDona(ctx, donater) {
        
     }
+    
     // 기부 o 사용 o
     async queryBloodCardsDonaUsed(ctx, donater) {
        
@@ -176,16 +177,16 @@ class BloodChain extends Contract {
     async useCard(ctx, donateRequester){
         console.log(donateRequester);
         const iterator = await ctx.stub.getQueryResult(`{ \"selector\": {\"docType\": \"bloodCard\", \"owner\": \"${donateRequester}\"} }`);
-            while (true) {
-                const res = await iterator.next();
+        while (true) {
+            const res = await iterator.next();
 
-                var bloodCard = JSON.parse(res.value.value.toString('utf8'));
-                bloodCard.is_used = true;
+            var bloodCard = JSON.parse(res.value.value.toString('utf8'));
+            bloodCard.is_used = true;
 
-                await ctx.stub.putState(res.value.key, Buffer.from(JSON.stringify(bloodCard)));
-                if(res.done)
-                    return;
-            }
+            await ctx.stub.putState(res.value.key, Buffer.from(JSON.stringify(bloodCard)));
+            if(res.done)
+                return;
+        }
     }
 
 }
