@@ -132,6 +132,18 @@ class BloodChain extends Contract {
     // 헌혈증 기부(구현 완료) return : x
     async donate(ctx, donate_count, donater, newOwner, used_place) {
         console.info('============= START : donate ===========');
+        // var query = {
+        //     "selector": {
+        //         "docType": "bloodCard",
+        //         "owner": donater,
+        //         "is_donated": false
+        //     },
+        //     "sort": [
+        //         "reg_date"
+        //     ],
+        //     "limit": donate_count
+        // }
+    
         const iterator = await ctx.stub.getQueryResult(`{
             "selector": {
                 "reg_date": {"$ne": null},
@@ -139,6 +151,9 @@ class BloodChain extends Contract {
                 "owner": "${donater}", 
                 "is_donated": false,
             },
+            "sort": [
+                {"reg_date": "asc"}
+            ],
             "limit": ${donate_count}
         }`);
         while (true) {
@@ -157,6 +172,18 @@ class BloodChain extends Contract {
                 return;
             }
         }
+        // const bloodCardAsBytes = await ctx.stub.getState(serialNumber);
+        // if(!bloodCardAsBytes || bloodCardAsBytes.length == 0){
+        //     throw new Error(`${serialNumber} does not exist`);
+        // }
+        // const bloodCard = JSON.parse(bloodCardAsBytes.toString());
+        // bloodCard.owner = newOwner;
+        // bloodCard.is_donated = true;
+        // bloodCard.donater = donater;
+        // bloodCard.dona_date = new Date().toLocaleDateString();
+        // bloodCard.used_place = used_place;
+        // await ctx.stub.putState(serialNumber, Buffer.from(JSON.stringify(bloodCard)));
+        // console.info('============= END : donate ===========');
     }
 
     // 헌혈증 사용(구현 완료) return : x
