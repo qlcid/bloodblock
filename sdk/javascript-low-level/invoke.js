@@ -14,7 +14,7 @@ const path = require('path');
 const util = require('util');
 
 var firstnetwork_path = path.resolve('..', '..', 'first-network');
-var org1tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org1.example.com', 'tlsca', 'tlsca.org1.example.com-cert.pem');
+var org1tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org2.example.com', 'tlsca', 'tlsca.org2.example.com-cert.pem');
 var org1tlscacert = fs.readFileSync(org1tlscacert_path, 'utf8');
 
 
@@ -23,7 +23,7 @@ var org1tlscacert = fs.readFileSync(org1tlscacert_path, 'utf8');
 // ex)
 // node invoke.js register 1(일련번호) wocjf8888(등록자 아이디)              
 // node invoke.js donate 2(기부할 헌혈증 개수) wocjf8888(기부자 아이디) jaecheol1234(기부 요청자 아이디, owner가 이걸로 바뀜) 명지병원(사용될 병원)
-// node invoke.js useCard jaecheol1234(헌혈증 사용할 기부요청자의 아이디)
+// node invoke.js use jaecheol1234(헌혈증 사용할 기부요청자의 아이디)
 
 const process = require('process');
 var args = process.argv;
@@ -69,8 +69,8 @@ async function invoke(func, params) {
 		const channel = fabric_client.newChannel('bloodchannel');
 		console.log('Created client side object to represent the channel');
 		// -- peer instance to represent a peer on the channel
-		const peer = fabric_client.newPeer('grpcs://localhost:7051', {
-			'ssl-target-name-override': 'peer0.org1.example.com',
+		const peer = fabric_client.newPeer('grpcs://localhost:9051', {
+			'ssl-target-name-override': 'peer0.org2.example.com',
 			pem: org1tlscacert
 		});
 		console.log('Created client side object to represent the peer');
@@ -93,7 +93,7 @@ async function invoke(func, params) {
 
 		// get the enrolled user from persistence and assign to the client instance
 		//    this user will sign all requests for the fabric network
-		const user = await fabric_client.getUserContext('user1', true);
+		const user = await fabric_client.getUserContext('user2', true);
 		if (user && user.isEnrolled()) {
 			console.log('Successfully loaded "user1" from user store');
 		} else {
