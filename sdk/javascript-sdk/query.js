@@ -12,8 +12,8 @@ var Fabric_Client = require('fabric-client');
 var fs = require('fs');
 var path = require('path');
 
-var firstnetwork_path = path.resolve('..', '..', 'first-network');
-var org1tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org2.example.com', 'tlsca', 'tlsca.org2.example.com-cert.pem');
+var bloodnetwork_path = path.resolve('..', '..', 'blood-network');
+var org1tlscacert_path = path.resolve(bloodnetwork_path, 'crypto-config', 'peerOrganizations', 'org1.example.com', 'tlsca', 'tlsca.org1.example.com-cert.pem');
 var org1tlscacert = fs.readFileSync(org1tlscacert_path, 'utf8');
 
 //
@@ -21,8 +21,8 @@ var fabric_client = new Fabric_Client();
 
 // setup the fabric network
 var channel = fabric_client.newChannel('bloodchannel');
-var peer = fabric_client.newPeer('grpcs://localhost:9051', {
-	'ssl-target-name-override': 'peer0.org2.example.com',
+var peer = fabric_client.newPeer('grpcs://localhost:7051', {
+	'ssl-target-name-override': 'peer0.org1.example.com',
 	pem: org1tlscacert
 });
 channel.addPeer(peer);
@@ -44,7 +44,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	fabric_client.setCryptoSuite(crypto_suite);
 
 	// get the enrolled user from persistence, this user will sign all requests
-	return fabric_client.getUserContext('user2', true);
+	return fabric_client.getUserContext('user1', true);
 }).then((user_from_store) => {
 	if (user_from_store && user_from_store.isEnrolled()) {
 		console.log('Successfully loaded user1 from persistence');
@@ -52,7 +52,6 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		throw new Error('Failed to get user1.... run registerUser.js');
 	}
 
-	// 재철이가 작성함~  명령행인자 받아서 query.js 호출함. 다음과 같이사용, 일단 웹연동 없이 개발하는거라 직접 인자로 넘겨주는거임
 	// node query.js [호출 구분 이름] [함수의 매개변수...]  
 	// ex)
 	// node query.js all
@@ -127,12 +126,6 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		default:
 			break;
 	}
-
-
-
-	// queryCar chaincode function - requires 1 argument, ex: args: ['CAR4'],
-	// queryAllCars chaincode function - requires no arguments , ex: args: [''],
-
 
 	// send the query proposal to the peer
 	return channel.queryByChaincode(request);

@@ -41,7 +41,7 @@ fi
 rm -rf ./hfc-key-store
 
 # launch network; create channel and join peer to channel
-cd ../first-network
+cd ../blood-network
 echo y | ./byfn.sh down
 echo y | ./byfn.sh up -a -n -s couchdb
 

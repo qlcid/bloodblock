@@ -5,7 +5,7 @@
 * SPDX-License-Identifier: Apache-2.0
 */
 /*
- * Register and Enroll a user
+ * Enroll the admin user
  */
 
 var Fabric_Client = require('fabric-client');
@@ -14,15 +14,14 @@ var Fabric_CA_Client = require('fabric-ca-client');
 var fs = require('fs');
 var path = require('path');
 
-var firstnetwork_path = path.resolve('..', '..', 'first-network');
-var org2tlscacert_path = path.resolve(firstnetwork_path, 'crypto-config', 'peerOrganizations', 'org2.example.com', 'tlsca', 'tlsca.org2.example.com-cert.pem');
+var bloodnetwork_path = path.resolve('..', '..', 'blood-network');
+var org2tlscacert_path = path.resolve(bloodnetwork_path, 'crypto-config', 'peerOrganizations', 'org2.example.com', 'tlsca', 'tlsca.org2.example.com-cert.pem');
 var org2tlscacert = fs.readFileSync(org2tlscacert_path, 'utf8');
 
 //
 var fabric_client = new Fabric_Client();
 var fabric_ca_client = null;
 var admin_user = null;
-var member_user = null;
 var store_path = path.join(__dirname, 'hfc-key-store');
 console.log(' Store path:'+store_path);
 
@@ -47,39 +46,32 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     // first check to see if the admin is already enrolled
     return fabric_client.getUserContext('admin', true);
 }).then((user_from_store) => {
-    if (user_from_store && user_from_store.isEnrolled()) {
+    if (5 == 4) {
         console.log('Successfully loaded admin from persistence');
         admin_user = user_from_store;
+        return null;
     } else {
-        throw new Error('Failed to get admin.... run enrollAdmin.js');
+        // need to enroll it with CA server
+        return fabric_ca_client.enroll({
+          enrollmentID: 'admin',
+          enrollmentSecret: 'adminpw'
+        }).then((enrollment) => {
+          console.log('Successfully enrolled admin2 user "admin"');
+          return fabric_client.createUser(
+              {username: 'admin2',
+                  mspid: 'Org2MSP',
+                  cryptoContent: { privateKeyPEM: enrollment.key.toBytes(), signedCertPEM: enrollment.certificate }
+              });
+        }).then((user) => {
+          admin_user = user;
+          return fabric_client.setUserContext(admin_user);
+        }).catch((err) => {
+          console.error('Failed to enroll and persist admin2. Error: ' + err.stack ? err.stack : err);
+          throw new Error('Failed to enroll admin');
+        });
     }
-
-    // at this point we should have the admin user
-    // first need to register the user with the CA server
-    return fabric_ca_client.register({enrollmentID: 'user2', affiliation: 'org2.department1',role: 'client'}, admin_user);
-}).then((secret) => {
-    // next we need to enroll the user with CA server
-    console.log('Successfully registered user2 - secret:'+ secret);
-
-    return fabric_ca_client.enroll({enrollmentID: 'user2', enrollmentSecret: secret});
-}).then((enrollment) => {
-  console.log('Successfully enrolled member user "user2" ');
-  return fabric_client.createUser(
-     {username: 'user2',
-     mspid: 'Org2MSP',
-     cryptoContent: { privateKeyPEM: enrollment.key.toBytes(), signedCertPEM: enrollment.certificate }
-     });
-}).then((user) => {
-     member_user = user;
-
-     return fabric_client.setUserContext(member_user);
-}).then(()=>{
-     console.log('User2 was successfully registered and enrolled and is ready to interact with the fabric network');
-
+}).then(() => {
+    console.log('Assigned the admin user to the fabric client ::' + admin_user.toString());
 }).catch((err) => {
-    console.error('Failed to register: ' + err);
-	if(err.toString().indexOf('Authorization') > -1) {
-		console.error('Authorization failures may be caused by having admin credentials from a previous CA instance.\n' +
-		'Try again after deleting the contents of the store directory '+store_path);
-	}
+    console.error('Failed to enroll admin: ' + err);
 });
