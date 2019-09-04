@@ -84,7 +84,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 			};
 			break;
 
-		case 'onlydona':
+		case 'dona':
 			if (args.length != 4) {
 				console.log('인자 개수 error! 다시입력 ㄱㄱ');
 				break;
@@ -92,20 +92,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 			request = {
 				//targets : --- letting this default to the peers assigned to the channel
 				chaincodeId: 'bloodchain',
-				fcn: 'queryBloodCardsOnlyDona',
-				args: args[3]
-			};
-			break;
-
-		case 'used':
-			if (args.length != 4) {
-				console.log('인자 개수 error! 다시입력 ㄱㄱ');
-				break;
-			}
-			request = {
-				//targets : --- letting this default to the peers assigned to the channel
-				chaincodeId: 'bloodchain',
-				fcn: 'queryBloodCardsDonaUsed',
+				fcn: 'queryBloodCardsDona',
 				args: args[3]
 			};
 			break;
