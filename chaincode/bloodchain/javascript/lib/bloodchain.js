@@ -22,6 +22,7 @@ class BloodChain extends Contract {
                 dona_date: null,
                 is_used: false,
                 used_place: null,
+                used_date: null
             },
             {
                 owner: 'jaecheol1234',
@@ -31,6 +32,7 @@ class BloodChain extends Contract {
                 dona_date: null,
                 is_used: false,
                 used_place: null,
+                used_date: null
             },
         ];
 
@@ -132,6 +134,7 @@ class BloodChain extends Contract {
             dona_date: null,
             is_used: false,
             used_place: null,
+            used_date: null,
             docType: 'bloodCard',
         };
 
@@ -182,7 +185,7 @@ class BloodChain extends Contract {
 
             var bloodCard = JSON.parse(res.value.value.toString('utf8'));
             bloodCard.is_used = true;
-
+            bloodCard.used_date = new Date().toLocaleDateString();
             await ctx.stub.putState(res.value.key, Buffer.from(JSON.stringify(bloodCard)));
             if(res.done)
                 return;
