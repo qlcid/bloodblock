@@ -212,7 +212,7 @@ class BloodChain extends Contract {
 
                 var bloodCard = JSON.parse(res.value.value.toString('utf8'));
                 bloodCard.is_used = true;
-                bloodCard.used_date = Date().toLocaleDateString();
+                bloodCard.used_date = new Date().toLocaleDateString();
                 await ctx.stub.putState(res.value.key, Buffer.from(JSON.stringify(bloodCard)));
                 if(res.done)
                     return;
