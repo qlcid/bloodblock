@@ -56,6 +56,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	// ex)
 	// node query.js all
 	// node query.js owner 1(사용자 아이디)
+	// node query.js donated yeseul(사용자 아이디)
 	const process = require('process');
 	var args = process.argv;
 	var func = args[2]; // 무슨 함수 호출할건지 가져옴. 
@@ -106,7 +107,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 				//targets : --- letting this default to the peers assigned to the channel
 				chaincodeId: 'bloodchain',
 				fcn: 'queryBloodCardsDonated',
-				args: args[3]
+				args: [args[3]]
 			};
 			break;
 
