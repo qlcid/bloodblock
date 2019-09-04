@@ -34,6 +34,16 @@ class BloodChain extends Contract {
                 used_place: null,
                 used_date: null
             },
+            {
+                owner: 'ys97',
+                reg_date: new Date().toLocaleDateString(),
+                is_donated: true,
+                donater: null,
+                dona_date: null,
+                is_used: false,
+                used_place: null,
+                used_date: null
+            },
         ];
 
         for (let i = 0; i < bloodCards.length; i++) {
@@ -199,7 +209,7 @@ class BloodChain extends Contract {
                 "reg_date": {"$ne": null},
                 "docType": "bloodCard", 
                 "owner": "${donater}", 
-                "is_donated": false,
+                "is_donated": false
             },
             "sort": [
                 {"reg_date": "asc"}
@@ -216,7 +226,9 @@ class BloodChain extends Contract {
             bloodCard.donater = donater;
             bloodCard.dona_date = new Date().toLocaleDateString();
             bloodCard.used_place = used_place;
+
             await ctx.stub.putState(res.value.key, Buffer.from(JSON.stringify(bloodCard)));
+
             if (res.done) {
                 console.info('============= END : donate ===========');
                 return;
