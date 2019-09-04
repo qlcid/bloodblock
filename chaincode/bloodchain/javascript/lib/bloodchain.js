@@ -34,6 +34,16 @@ class BloodChain extends Contract {
                 used_place: null,
                 used_date: null
             },
+            {
+                owner: 'ys97',
+                reg_date: new Date().toLocaleDateString(),
+                is_donated: true,
+                donater: null,
+                dona_date: null,
+                is_used: false,
+                used_place: null,
+                used_date: null
+            },
         ];
 
         for (let i = 0; i < bloodCards.length; i++) {
@@ -93,6 +103,7 @@ class BloodChain extends Contract {
             }
         }`);
         const allResults = [];
+
         while (true) {
             const res = await iterator.next();
             if (res.value && res.value.value.toString()) {
@@ -108,6 +119,7 @@ class BloodChain extends Contract {
                 }
                 allResults.push({ Key, Record });
             }
+
             if (res.done) {
                 console.log('end of data');
                 await iterator.close();
@@ -128,7 +140,11 @@ class BloodChain extends Contract {
             "selector": {
                 "docType": "bloodCard",
                 "is_donated": true,
+<<<<<<< chaincode/bloodchain/javascript/lib/bloodchain.js
+                "owner": "${owner}"
+=======
 		"owner": "${owner}"
+>>>>>>> chaincode/bloodchain/javascript/lib/bloodchain.js
             }
         }`);
         const allResults = [];
@@ -155,7 +171,11 @@ class BloodChain extends Contract {
                 console.info(allResults);
                 return JSON.stringify(allResults);
             }
+<<<<<<< chaincode/bloodchain/javascript/lib/bloodchain.js
+        }
+=======
         }       
+>>>>>>> chaincode/bloodchain/javascript/lib/bloodchain.js
     }
 
     // 헌혈증 등록(구현 완료) return : x
@@ -197,7 +217,7 @@ class BloodChain extends Contract {
                 "reg_date": {"$ne": null},
                 "docType": "bloodCard", 
                 "owner": "${donater}", 
-                "is_donated": false,
+                "is_donated": false
             },
             "sort": [
                 {"reg_date": "asc"}
@@ -214,7 +234,9 @@ class BloodChain extends Contract {
             bloodCard.donater = donater;
             bloodCard.dona_date = new Date().toLocaleDateString();
             bloodCard.used_place = used_place;
+
             await ctx.stub.putState(res.value.key, Buffer.from(JSON.stringify(bloodCard)));
+
             if (res.done) {
                 console.info('============= END : donate ===========');
                 return;
@@ -252,4 +274,4 @@ class BloodChain extends Contract {
 
 }
 
-module.exports = BloodChain;
+module.exports = BloodChain;
