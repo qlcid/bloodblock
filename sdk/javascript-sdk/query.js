@@ -55,12 +55,13 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	// node query.js [호출 구분 이름] [함수의 매개변수...]  
 	// ex)
 	// node query.js all
-	// node query.js owner 1(사용자 아이디)
 	// node query.js donated yeseul(사용자 아이디)
 	const process = require('process');
 	var args = process.argv;
 	var func = args[2]; // 무슨 함수 호출할건지 가져옴. 
 	var request;
+
+	console.log(args[3]);
 	
 	switch (func) {
 		case 'all':

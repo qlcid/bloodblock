@@ -140,7 +140,11 @@ class BloodChain extends Contract {
             "selector": {
                 "docType": "bloodCard",
                 "is_donated": true,
+<<<<<<< chaincode/bloodchain/javascript/lib/bloodchain.js
                 "owner": "${owner}"
+=======
+		"owner": "${owner}"
+>>>>>>> chaincode/bloodchain/javascript/lib/bloodchain.js
             }
         }`);
         const allResults = [];
@@ -167,7 +171,11 @@ class BloodChain extends Contract {
                 console.info(allResults);
                 return JSON.stringify(allResults);
             }
+<<<<<<< chaincode/bloodchain/javascript/lib/bloodchain.js
         }
+=======
+        }       
+>>>>>>> chaincode/bloodchain/javascript/lib/bloodchain.js
     }
 
     // 헌혈증 등록(구현 완료) return : x
@@ -266,4 +274,4 @@ class BloodChain extends Contract {
 
 }
 
-module.exports = BloodChain;
+module.exports = BloodChain;
